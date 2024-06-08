@@ -15,20 +15,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/svg" href="calculator.svg"/>
-    <title>Calculators</title>
+    <title>Calculator [MP]</title>
     <style>
       body {
       font-family: Arial, sans-serif;
       margin: 35px;
+			margin-top: 20px;
       }
       .container {
-      max-width: 600px;
+      max-width: 650px;
       margin: auto;
       }
 			h1 {
 				margin-top: 10px;
 				text-decoration: underline;
 				color: blue;
+				font-size: 30px;
 			}
       h2, h3, h4, h5 {
 			margin-top: 5px;
@@ -69,10 +71,10 @@
 			<input type="number" id="mp_money" placeholder="$">
 			<h2>Días de colocación</h2>
 			<input type="number" id="mp_days" placeholder="">
-			<h1>••• Inflación Mensual •••</h1>
+			<!-- <h1>••• Inflación Mensual •••</h1>
 			<input type="number" id="arg_inflation" placeholder="%">
 			<h1>••• Próximo vencimiento de Tarjeta •••</h1>
-			<input type="date" id="card_expire" placeholder="">
+			<input type="date" id="card_expire" placeholder=""> -->
       <button id="submit" onclick="doCalculation()">Calcular</button>
       <div id="output" class="output"></div>
     </div>
@@ -87,8 +89,8 @@
 				var mp_tna = document.getElementById('mp_tna').value;
 				var mp_money = document.getElementById('mp_money').value;
 				var mp_days = document.getElementById('mp_days').value;
-				var arg_inflation = document.getElementById('arg_inflation').value;
-				var card_expire =  document.getElementById('card_expire').value;
+				// var arg_inflation = document.getElementById('arg_inflation').value;
+				// var card_expire =  document.getElementById('card_expire').value;
 				///////////////////////////////////////////////
 				var output = document.getElementById('output');
 				var mp_ted = ((1+(mp_tna/(365*100)))-1)*100;
@@ -122,7 +124,7 @@
 				var mp_te30I = maxToDecimals(mp_te30M - mp_money);
 				var mp_texI = maxToDecimals(mp_texM - mp_money);
 				///////////////////////////////////////////////
-				output.textContent = "• TED [MP]: " + show_mp_ted + " %\n• TEA [MP]: " + show_mp_tea + " %\n• TE30 [MP]: " + show_mp_te30 + " %\n----------------------------------------\n• TE" + mp_days + " [MP]: " + show_mp_tex + " %\n========================================\n• Patrimonio en 1 día: $" + mp_tedM + "\n• Patrimonio en 30 días: $" + mp_te30M + "\n• Patrimonio en 365 días: $" + mp_teaM + "\n• Patrimonio en " + mp_days + " días: $" + mp_texM+"\n----------------------------------------\n• Intereses ganandos en 1 día: $" + mp_tedI +"\n• Intereses en 30 días: $" + mp_teaI + "\n• Intereses en 365 días: $" + mp_te30I + "\n• Intereses en " + mp_days + " días: $" + mp_texI + "\n========================================"; 
+				output.textContent = "####################\n### Mercado Pago ###\n####################\n========================================\n• TED: " + show_mp_ted + " %\n• TEA: " + show_mp_tea + " %\n• TE30: " + show_mp_te30 + " %\n----------------------------------------\n• TE" + mp_days + ": " + show_mp_tex + " %\n========================================\n• Patrimonio en 1 día: $" + mp_tedM + "\n• Patrimonio en 30 días: $" + mp_te30M + "\n• Patrimonio en 365 días: $" + mp_teaM + "\n• Patrimonio en " + mp_days + " días: $" + mp_texM+"\n----------------------------------------\n• Intereses ganados en 1 día: $" + mp_tedI +"\n• Intereses ganados en 30 días: $" + mp_te30I + "\n• Intereses ganados en 365 días: $" + mp_teaI + "\n• Intereses ganados en " + mp_days + " días: $" + mp_texI + "\n========================================"; 
 				window.scrollTo(0, document.body.scrollHeight);
       }
 			// ##############################
