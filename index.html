@@ -7,6 +7,27 @@
 ■■■■■■■■■■■■■
 ■■■ Notas ■■■
 ■■■■■■■■■■■■■
+TNA [MP] Actual = 36.6%
+TNA [MP] = 51%
+TED [MP] = ((1+(TNA/(365*100)))-1)*100
+TED [MP] = 0.13972602739% || Que es lo que se obtiene por poner 1 peso ... (13 centavos por día)
+TEA [MP] = ((1+TED/100)^365-1)*100
+TEA [MP] = 66.46%
+TEM [MP] = ((1+TED/100)^30-1)*100
+TEM [MP] = 4.27%
+$1000 en TEA [MP] = 1000*(1+TEA/100)
+$1000 en TEA [MP] = 1664$
+$18000 en TE5 = (1+TED)^5-1
+==================================================================================================
+TNA [Banco] Actual = 30%
+TNA [Banco] = 30%
+TED [Banco] = TNA/365
+TED [Banco] = 0.08219178082% || Que es lo que se obtiene por poner 1 peso ... (8 centavos por día)
+TEM [Banco] = TNA/12 
+TEM [Banco] = 2.5%
+TEA [Banco] = ((1+TEM/100)^12-1)*100
+TEA [Banco] = 34.48%
+TE2M [Banco] = ((1+TEM/100)^2-1)*100
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -65,13 +86,18 @@
   </head>
   <body>
     <div class="container">
+			<h1>••• Dinero •••</h1>
+			<input type="number" id="money" placeholder="$">
 			<h1>••• Mercado Pago •••</h1>
       <h2>TNA</h2>
       <input type="number" id="mp_tna" placeholder="%">
-			<h2>Dinero</h2>
-			<input type="number" id="mp_money" placeholder="$">
 			<h2>Días de colocación</h2>
 			<input type="number" id="mp_days" placeholder="">
+			<h1>••• Banco •••</h1>
+			<h2>TNA</h2>
+			<input type="number" id="bank_tna" placeholder="">
+			<h2>Meses de colocación</h2>
+			<input type="number" id="bank_months" placeholder="">
 			<!-- <h1>••• Inflación Mensual •••</h1>
 			<input type="number" id="arg_inflation" placeholder="%">
 			<h1>••• Próximo vencimiento de Tarjeta •••</h1>
@@ -87,45 +113,51 @@
 				return Math.round(num * 100) / 100
 			}
       function doCalculation() {
+				var output = document.getElementById('output');
+				///////////////////////////////////////////////
 				var mp_tna = document.getElementById('mp_tna').value;
-				var mp_money = document.getElementById('mp_money').value;
+				var money = document.getElementById('money').value;
 				var mp_days = document.getElementById('mp_days').value;
 				// var arg_inflation = document.getElementById('arg_inflation').value;
 				// var card_expire =  document.getElementById('card_expire').value;
 				///////////////////////////////////////////////
-				var output = document.getElementById('output');
 				var mp_ted = ((1+(mp_tna/(365*100)))-1)*100;
 				var mp_tea = (((1+mp_ted/100)**365)-1)*100;
-				var mp_te30 = (((1+mp_ted/100)**30)-1)*100;
+				var mp_tem = (((1+mp_ted/100)**30)-1)*100;
 				var mp_tex = (((1+mp_ted/100)**mp_days)-1)*100;
-				var show_mp_ted = maxToDecimals(mp_ted);
-				var show_mp_tea = maxToDecimals(mp_tea);
-				var show_mp_te30 = maxToDecimals(mp_te30);
-				var show_mp_tex = maxToDecimals(mp_tex);
+				var mp_ted_show = maxToDecimals(mp_ted);
+				var mp_tea_show = maxToDecimals(mp_tea);
+				var mp_tem_show = maxToDecimals(mp_tem);
+				var mp_tex_show = maxToDecimals(mp_tex);
+				var mp_tedP = maxToDecimals(money*(1+mp_ted/100));
+				var mp_teaP = maxToDecimals(money*(1+mp_tea/100));
+				var mp_temP = maxToDecimals(money*(1+mp_tem/100));
+				var mp_texP = maxToDecimals(money*(1+mp_tex/100));
+				var mp_tedI = maxToDecimals(mp_tedP - money);
+				var mp_teaI = maxToDecimals(mp_teaP - money);
+				var mp_temI = maxToDecimals(mp_temP - money);
+				var mp_texI = maxToDecimals(mp_texP - money);
 				///////////////////////////////////////////////
-				var mp_tedM = mp_money*(1+mp_ted/100);
-				var mp_teaM = mp_money*(1+mp_tea/100);
-				var mp_te30M = mp_money*(1+mp_te30/100);
-				var mp_texM = mp_money*(1+mp_tex/100);
-				if (mp_tedM != 0) {
-					mp_tedM = maxToDecimals(mp_tedM);
-				}
-				if (mp_teaM != 0) {
-					mp_teaM = maxToDecimals(mp_teaM);
-				}
-				if (mp_te30M != 0) {
-					mp_te30M = maxToDecimals(mp_te30M);
-				}
-				if (mp_texM != 0) {
-					mp_texM = maxToDecimals(mp_texM);
-				}
+				var bank_tna = document.getElementById('bank_tna').value;
+				var bank_months = document.getElementById('bank_months').value;
+				var bank_ted = bank_tna/365;
+				var bank_tem = bank_tna/12;
+				var bank_tea = ((1+bank_tem/100)**12-1)*100;
+				var bank_tex = ((1+bank_tem/100)**bank_months-1)*100;
+				var bank_ted_show = maxToDecimals(bank_ted);
+				var bank_tea_show = maxToDecimals(bank_tea);
+				var bank_tem_show = maxToDecimals(bank_tem);
+				var bank_tex_show = maxToDecimals(bank_tex);
+				var bank_tedP = maxToDecimals(money*(1+bank_ted/100));
+				var bank_temP = maxToDecimals(money*(1+bank_tem/100));
+				var bank_teaP = maxToDecimals(money*(1+bank_tea/100));
+				var bank_texP = maxToDecimals(money*(1+bank_tex/100));
+				var bank_temI = maxToDecimals(bank_tedP - money);
+				var bank_teaI = maxToDecimals(bank_teaP - money);
+				var bank_tedI = maxToDecimals(bank_tedP - money);
+				var bank_texI = maxToDecimals(bank_texP - money);
 				///////////////////////////////////////////////
-				var mp_tedI = maxToDecimals(mp_tedM - mp_money);
-				var mp_teaI = maxToDecimals(mp_teaM - mp_money);
-				var mp_te30I = maxToDecimals(mp_te30M - mp_money);
-				var mp_texI = maxToDecimals(mp_texM - mp_money);
-				///////////////////////////////////////////////
-				output.textContent = "####################\n### Mercado Pago ###\n####################\n=====================================\n• TED: " + show_mp_ted + " %\n• TEA: " + show_mp_tea + " %\n• TE30: " + show_mp_te30 + " %\n-------------------------------------\n• TE" + mp_days + ": " + show_mp_tex + " %\n=====================================\n• Patrimonio en 1 día: $" + mp_tedM + "\n• Patrimonio en 30 días: $" + mp_te30M + "\n• Patrimonio en 365 días: $" + mp_teaM + "\n• Patrimonio en " + mp_days + " días: $" + mp_texM+"\n-------------------------------------\n• Intereses ganados en 1 día: $" + mp_tedI +"\n• Intereses ganados en 30 días: $" + mp_te30I + "\n• Intereses ganados en 365 días: $" + mp_teaI + "\n• Intereses ganados en " + mp_days + " días: $" + mp_texI + "\n====================================="; 
+				output.textContent = "####################\n### Mercado Pago ###\n####################\n=====================================\n• TED: " + mp_ted_show + " %\n• TEM: " + mp_tem_show + " %\n• TEA: " + mp_tea_show + " %\n-------------------------------------\n• TE" + mp_days + ": " + mp_tex_show + " %\n=====================================\n• Patrimonio en 1 día: $" + mp_tedP + "\n• Patrimonio en 30 días: $" + mp_temP + "\n• Patrimonio en 365 días: $" + mp_teaP + "\n• Patrimonio en " + mp_days + " días: $" + mp_texP+"\n-------------------------------------\n• Ints ganados en 1 día: $" + mp_tedI +"\n• Ints ganados en 30 días: $" + mp_temI + "\n• Ints ganados en 365 días: $" + mp_teaI + "\n• Ints ganados en " + mp_days + " días: $" + mp_texI + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n#############\n### Banco ###\n#############\n=====================================\n• TED: " + bank_ted_show + " %\n• TEM: " + bank_tem_show + " %\n• TEA: " + bank_tea_show + " %\n-------------------------------------\n• TE" + bank_months*30 + ": " + bank_tex_show + " %\n=====================================\n• Patrimonio en 1 día: $" + bank_tedP + "\n• Patrimonio en 30 días: $" + bank_temP + "\n• Patrimonio en 365 días: $" + bank_teaP + "\n• Patrimonio en " + bank_months*30 + " días: $" + bank_texP + "\n-------------------------------------\n• Ints ganados en 1 día: $" + bank_tedI +"\n• Ints ganados en 30 días: $" + bank_temI + "\n• Ints ganados en 365 días: $" + bank_teaI + "\n• Ints ganados en " + bank_months*30 + " días: $" + bank_texI + "\n=====================================";
 				window.scrollTo(0, document.body.scrollHeight);
       }
 			// ##############################
