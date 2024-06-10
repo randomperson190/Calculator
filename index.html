@@ -51,10 +51,10 @@ TE2M [Banco] = ((1+TEM/100)^2-1)*100
       margin: auto;
       }
 			h1 {
-				margin-top: 10px;
-				text-decoration: underline;
-				color: blue;
-				font-size: 30px;
+			margin-top: 10px;
+			text-decoration: underline;
+			color: blue;
+			font-size: 30px;
 			}
       h2, h3, h4, h5 {
 			margin-top: 5px;
@@ -78,9 +78,9 @@ TE2M [Banco] = ((1+TEM/100)^2-1)*100
       background-color: #0056b3;
       }
       .output {
-      margin-top: 10px;
-      padding: 10px;
-      border: 1px solid #ddd;
+			margin-top: 10px;
+			padding: 10px;
+			border: 1px solid #ddd;
 			font-family: Consolas, monospace;
 			white-space: pre-line; /* Permite el muiltilinea */
 			word-wrap: break-word; /* Wrap long words */
@@ -112,64 +112,107 @@ TE2M [Banco] = ((1+TEM/100)^2-1)*100
 			// ###########################
 			// ### Execute Calculation ###
 			// ###########################
+      function doCalculation() {
+				let output = document.getElementById('output');
+				///////////////////////////////////////////////
+				let money = document.getElementById('money').value;
+				let mp_tna = document.getElementById('mp_tna').value;
+				let mp_days = document.getElementById('mp_days').value;
+				let bank_tna = document.getElementById('bank_tna').value;
+				let bank_months = document.getElementById('bank_months').value;
+				// let arg_inflation = document.getElementById('arg_inflation').value;
+				// let card_expire =  document.getElementById('card_expire').value;
+				////////////////////////////
+				/// Datos de MercadoPago ///
+				////////////////////////////
+				let mp_ted = ((1+(mp_tna/(365*100)))-1)*100;
+				let mp_tea = (((1+mp_ted/100)**365)-1)*100;
+				let mp_tem = (((1+mp_ted/100)**30)-1)*100;
+				let mp_tex = (((1+mp_ted/100)**mp_days)-1)*100;
+				let mp_ted_show = maxToDecimals(mp_ted);
+				let mp_tea_show = maxToDecimals(mp_tea);
+				let mp_tem_show = maxToDecimals(mp_tem);
+				let mp_tex_show = maxToDecimals(mp_tex);
+				let mp_tedP = maxToDecimals(money*(1+mp_ted/100));
+				let mp_teaP = maxToDecimals(money*(1+mp_tea/100));
+				let mp_temP = maxToDecimals(money*(1+mp_tem/100));
+				let mp_texP = maxToDecimals(money*(1+mp_tex/100));
+				let mp_tedI = maxToDecimals(mp_tedP - money);
+				let mp_teaI = maxToDecimals(mp_teaP - money);
+				let mp_temI = maxToDecimals(mp_temP - money);
+				let mp_texI = maxToDecimals(mp_texP - money);
+				//////////////////////
+				/// Datos de Banco ///
+				//////////////////////
+				let bank_ted = bank_tna/365;
+				let bank_tem = bank_tna/12;
+				let bank_tea = ((1+bank_tem/100)**12-1)*100;
+				let bank_tex = ((1+bank_tem/100)**bank_months-1)*100;
+				let bank_ted_show = maxToDecimals(bank_ted);
+				let bank_tea_show = maxToDecimals(bank_tea);
+				let bank_tem_show = maxToDecimals(bank_tem);
+				let bank_tex_show = maxToDecimals(bank_tex);
+				let bank_tedP = maxToDecimals(money*(1+bank_ted/100));
+				let bank_temP = maxToDecimals(money*(1+bank_tem/100));
+				let bank_teaP = maxToDecimals(money*(1+bank_tea/100));
+				let bank_texP = maxToDecimals(money*(1+bank_tex/100));
+				let bank_temI = maxToDecimals(bank_tedP - money);
+				let bank_teaI = maxToDecimals(bank_teaP - money);
+				let bank_tedI = maxToDecimals(bank_tedP - money);
+				let bank_texI = maxToDecimals(bank_texP - money);
+				///////////////////////////////////////////////
+				output.textContent = 
+				"####################\n### Mercado Pago ###\n####################\n" +
+				"=====================================\n" +
+				"• TED: " + mp_ted.toFixed(2) + " %\n" +
+				"• TEM: " + mp_tem.toFixed(2) + " %\n" +
+				"• TEA: " + mp_tea.toFixed(2) + " %\n" +
+				"-------------------------------------\n" +
+				"• TE" + mp_days + ": " + mp_tex.toFixed(2) + " %\n" +
+				"=====================================\n" +
+				"• Patrimonio en 1 día: $" + mp_tedP + "\n" +
+				"• Patrimonio en 30 días: $" + mp_temP + "\n" +
+				"• Patrimonio en 365 días: $" + mp_teaP + "\n" +
+				"• Patrimonio en " + mp_days + " días: $" + mp_texP + "\n" +
+				"-------------------------------------\n" +
+				"• Ints ganados en 1 día: $" + mp_tedI + "\n" +
+				"• Ints ganados en 30 días: $" + mp_temI + "\n" +
+				"• Ints ganados en 365 días: $" + mp_teaI + "\n" +
+				"• Ints ganados en " + mp_days + " días: $" + mp_texI + "\n" +
+				"=====================================\n" +
+				"#############\n### Banco ###\n#############\n" +
+				"=====================================\n" +
+				"• TED: " + bank_ted.toFixed(2) + " %\n" +
+				"• TEM: " + bank_tem.toFixed(2) + " %\n" +
+				"• TEA: " + bank_tea.toFixed(2) + " %\n" +
+				"-------------------------------------\n" +
+				"• TE" + (bank_months * 30) + ": " + bank_tex.toFixed(2) + " %\n" +
+				"=====================================\n" +
+				"• Patrimonio en 1 día: $" + bank_tedP + "\n" +
+				"• Patrimonio en 30 días: $" + bank_temP + "\n" +
+				"• Patrimonio en 365 días: $" + bank_teaP + "\n" +
+				"• Patrimonio en " + (bank_months * 30) + " días: $" + bank_texP + "\n" +
+				"-------------------------------------\n" +
+				"• Ints ganados en 1 día: $" + bank_tedI + "\n" +
+				"• Ints ganados en 30 días: $" + bank_temI + "\n" +
+				"• Ints ganados en 365 días: $" + bank_teaI + "\n" +
+				"• Ints ganados en " + (bank_months * 30) + " días: $" + bank_texI + "\n" +
+				"=====================================";
+				window.scrollTo(0, document.body.scrollHeight);
+      }
+			// #########################################
+			// ### Redondeo de Números a 2 decimales ###
+			// #########################################
 			function maxToDecimals(num) {
 				return Math.round(num * 100) / 100
 			}
-      function doCalculation() {
-				var output = document.getElementById('output');
-				///////////////////////////////////////////////
-				var mp_tna = document.getElementById('mp_tna').value;
-				var money = document.getElementById('money').value;
-				var mp_days = document.getElementById('mp_days').value;
-				// var arg_inflation = document.getElementById('arg_inflation').value;
-				// var card_expire =  document.getElementById('card_expire').value;
-				///////////////////////////////////////////////
-				var mp_ted = ((1+(mp_tna/(365*100)))-1)*100;
-				var mp_tea = (((1+mp_ted/100)**365)-1)*100;
-				var mp_tem = (((1+mp_ted/100)**30)-1)*100;
-				var mp_tex = (((1+mp_ted/100)**mp_days)-1)*100;
-				var mp_ted_show = maxToDecimals(mp_ted);
-				var mp_tea_show = maxToDecimals(mp_tea);
-				var mp_tem_show = maxToDecimals(mp_tem);
-				var mp_tex_show = maxToDecimals(mp_tex);
-				var mp_tedP = maxToDecimals(money*(1+mp_ted/100));
-				var mp_teaP = maxToDecimals(money*(1+mp_tea/100));
-				var mp_temP = maxToDecimals(money*(1+mp_tem/100));
-				var mp_texP = maxToDecimals(money*(1+mp_tex/100));
-				var mp_tedI = maxToDecimals(mp_tedP - money);
-				var mp_teaI = maxToDecimals(mp_teaP - money);
-				var mp_temI = maxToDecimals(mp_temP - money);
-				var mp_texI = maxToDecimals(mp_texP - money);
-				///////////////////////////////////////////////
-				var bank_tna = document.getElementById('bank_tna').value;
-				var bank_months = document.getElementById('bank_months').value;
-				var bank_ted = bank_tna/365;
-				var bank_tem = bank_tna/12;
-				var bank_tea = ((1+bank_tem/100)**12-1)*100;
-				var bank_tex = ((1+bank_tem/100)**bank_months-1)*100;
-				var bank_ted_show = maxToDecimals(bank_ted);
-				var bank_tea_show = maxToDecimals(bank_tea);
-				var bank_tem_show = maxToDecimals(bank_tem);
-				var bank_tex_show = maxToDecimals(bank_tex);
-				var bank_tedP = maxToDecimals(money*(1+bank_ted/100));
-				var bank_temP = maxToDecimals(money*(1+bank_tem/100));
-				var bank_teaP = maxToDecimals(money*(1+bank_tea/100));
-				var bank_texP = maxToDecimals(money*(1+bank_tex/100));
-				var bank_temI = maxToDecimals(bank_tedP - money);
-				var bank_teaI = maxToDecimals(bank_teaP - money);
-				var bank_tedI = maxToDecimals(bank_tedP - money);
-				var bank_texI = maxToDecimals(bank_texP - money);
-				///////////////////////////////////////////////
-				output.textContent = "####################\n### Mercado Pago ###\n####################\n=====================================\n• TED: " + mp_ted_show + " %\n• TEM: " + mp_tem_show + " %\n• TEA: " + mp_tea_show + " %\n-------------------------------------\n• TE" + mp_days*1 + ": " + mp_tex_show + " %\n=====================================\n• Patrimonio en 1 día: $" + mp_tedP + "\n• Patrimonio en 30 días: $" + mp_temP + "\n• Patrimonio en 365 días: $" + mp_teaP + "\n• Patrimonio en " + mp_days + " días: $" + mp_texP+"\n-------------------------------------\n• Ints ganados en 1 día: $" + mp_tedI +"\n• Ints ganados en 30 días: $" + mp_temI + "\n• Ints ganados en 365 días: $" + mp_teaI + "\n• Ints ganados en " + mp_days + " días: $" + mp_texI + "\n■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n#############\n### Banco ###\n#############\n=====================================\n• TED: " + bank_ted_show + " %\n• TEM: " + bank_tem_show + " %\n• TEA: " + bank_tea_show + " %\n-------------------------------------\n• TE" + bank_months*30 + ": " + bank_tex_show + " %\n=====================================\n• Patrimonio en 1 día: $" + bank_tedP + "\n• Patrimonio en 30 días: $" + bank_temP + "\n• Patrimonio en 365 días: $" + bank_teaP + "\n• Patrimonio en " + bank_months*30 + " días: $" + bank_texP + "\n-------------------------------------\n• Ints ganados en 1 día: $" + bank_tedI +"\n• Ints ganados en 30 días: $" + bank_temI + "\n• Ints ganados en 365 días: $" + bank_teaI + "\n• Ints ganados en " + bank_months*30 + " días: $" + bank_texI + "\n=====================================";
-				window.scrollTo(0, document.body.scrollHeight);
-      }
 			// ##############################
 			// ### Anytime pressing Enter ###
 			// ##############################
 			document.addEventListener('DOMContentLoaded', (event) => {
 				document.addEventListener('keydown', function(event) {
 					if (event.key === 'Enter') {
-							event.preventDefault(); // Prevent the default action of Enter key
+						event.preventDefault(); // Prevent the default action of Enter key
 						document.getElementById('submit').click(); // Trigger click on Submit button
 					}
 				});
